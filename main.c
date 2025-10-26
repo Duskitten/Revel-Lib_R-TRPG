@@ -151,7 +151,7 @@ int main() {
         draw_font2d(text, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", (ScePspFVector2){0,16*13});
         draw_font2d(text, "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo", (ScePspFVector2){0,16*14});
         draw_font2d(text, "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp", (ScePspFVector2){0,16*15});
-        draw_font2d(text, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", (ScePspFVector2){0,16*16});
+        draw_font2d(text, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", (ScePspFVector2){0,16*16});
         //** End Draw Everything Here **//
         //Controller Processing
         if (pad.Buttons != 0)

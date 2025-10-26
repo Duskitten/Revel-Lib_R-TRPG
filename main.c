@@ -113,6 +113,8 @@ int main() {
     sceGumMatrixMode(GU_MODEL);
     sceGumLoadIdentity();
     pspDebugScreenSetXY(0, 0);
+    Texture* tex = load_texture("Assets/Font/Revel_PixelFont.png",GU_TRUE);
+    Font2D* text = create_font2d(tex,0xFFFFFFFF,(ScePspIVector2){16,8},(ScePspFVector2){8,16},(ScePspFVector2){0,0},"abcdefghijklmnopqrstuvwxyz1234567890.,:;!?|'\" ");
 
     //Setup Controllers
     SceCtrlData pad;
@@ -133,7 +135,23 @@ int main() {
 
         sceCtrlReadBufferPositive(&pad, 1);
         //** Draw Everything Here **//
-
+        draw_font2d(text, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", (ScePspFVector2){0,16*0});
+        draw_font2d(text, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", (ScePspFVector2){0,16*1});
+        draw_font2d(text, "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", (ScePspFVector2){0,16*2});
+        draw_font2d(text, "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", (ScePspFVector2){0,16*3});
+        draw_font2d(text, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", (ScePspFVector2){0,16*4});
+        draw_font2d(text, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", (ScePspFVector2){0,16*5});
+        draw_font2d(text, "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg", (ScePspFVector2){0,16*6});
+        draw_font2d(text, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", (ScePspFVector2){0,16*7});
+        draw_font2d(text, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", (ScePspFVector2){0,16*8});
+        draw_font2d(text, "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", (ScePspFVector2){0,16*9});
+        draw_font2d(text, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", (ScePspFVector2){0,16*10});
+        draw_font2d(text, "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll", (ScePspFVector2){0,16*11});
+        draw_font2d(text, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", (ScePspFVector2){0,16*12});
+        draw_font2d(text, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", (ScePspFVector2){0,16*13});
+        draw_font2d(text, "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo", (ScePspFVector2){0,16*14});
+        draw_font2d(text, "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp", (ScePspFVector2){0,16*15});
+        draw_font2d(text, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", (ScePspFVector2){0,16*16});
         //** End Draw Everything Here **//
         //Controller Processing
         if (pad.Buttons != 0)

@@ -91,8 +91,12 @@ int SetupCallbacks(void) {
 	}
 	return thid;
 }
-
-
+char holder_text[1037] = "";
+char dialogue_lines[1][60] = {
+    //intro text
+    ">>you wake up on a rocking boat."
+};
+char scroller[1037] = "";
 
 int main() {
     // Boilerplate
@@ -114,14 +118,20 @@ int main() {
     sceGumLoadIdentity();
     pspDebugScreenSetXY(0, 0);
     Texture* tex = load_texture("Assets/Font/Revel_PixelFont.png",GU_TRUE);
-    Font2D* text = create_font2d(tex,0xFFFFFFFF,(ScePspIVector2){16,8},(ScePspFVector2){8,16},(ScePspFVector2){0,0},"abcdefghijklmnopqrstuvwxyz1234567890.,:;!?|'\" ");
+    Font2D* text = create_font2d(tex,0xFFFFFFFF,(ScePspIVector2){16,8},(ScePspFVector2){8,16},(ScePspFVector2){0,0},"abcdefghijklmnopqrstuvwxyz1234567890.,:;!?|'\"><# ");
 
     //Setup Controllers
     SceCtrlData pad;
     sceCtrlSetSamplingCycle(0);
     sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
+    
+    int textpoint = 0;
+    
+    size_t total_time = 0;
+    strcpy(holder_text,dialogue_lines[0]);
 
     while(running){
+
         startFrame();
         pspDebugScreenSetXY(0, 0);
         // Blending
@@ -135,23 +145,35 @@ int main() {
 
         sceCtrlReadBufferPositive(&pad, 1);
         //** Draw Everything Here **//
-        draw_font2d(text, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", (ScePspFVector2){0,16*0});
-        draw_font2d(text, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", (ScePspFVector2){0,16*1});
-        draw_font2d(text, "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", (ScePspFVector2){0,16*2});
-        draw_font2d(text, "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", (ScePspFVector2){0,16*3});
-        draw_font2d(text, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", (ScePspFVector2){0,16*4});
-        draw_font2d(text, "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", (ScePspFVector2){0,16*5});
-        draw_font2d(text, "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg", (ScePspFVector2){0,16*6});
-        draw_font2d(text, "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", (ScePspFVector2){0,16*7});
-        draw_font2d(text, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii", (ScePspFVector2){0,16*8});
-        draw_font2d(text, "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", (ScePspFVector2){0,16*9});
-        draw_font2d(text, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", (ScePspFVector2){0,16*10});
-        draw_font2d(text, "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllll", (ScePspFVector2){0,16*11});
-        draw_font2d(text, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", (ScePspFVector2){0,16*12});
-        draw_font2d(text, "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", (ScePspFVector2){0,16*13});
-        draw_font2d(text, "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo", (ScePspFVector2){0,16*14});
-        draw_font2d(text, "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp", (ScePspFVector2){0,16*15});
-        draw_font2d(text, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", (ScePspFVector2){0,16*16});
+        draw_font2d(text, scroller, (ScePspFVector2){0,0});
+        
+        if(total_time % (1000/1000) == 0){
+            total_time = 0;
+            //pspDebugScreenPrintf("%d", textpoint);
+            if (textpoint < strlen(holder_text)){
+                char total_char[] = "";
+                for(int x = textpoint; x < strlen(holder_text); x++){
+                     char charString[2];
+                     charString[0] = holder_text[x];
+                     charString[1] = '\0';
+                     strcat(total_char, charString);
+                     if(holder_text[x] != ' '){
+                         textpoint = x+1;
+                         strcat(scroller,total_char);
+                         break;
+                    }
+                }
+
+
+                // char charString[2];
+                // charString[0] = chosentext[0][textpoint];
+                // charString[1] = '\0';
+                // strcat(scroller[0],charString);
+                // textpoint += 1;
+            }
+        }
+
+
         //** End Draw Everything Here **//
         //Controller Processing
         if (pad.Buttons != 0)
@@ -177,7 +199,7 @@ int main() {
             if (pad.Buttons & PSP_CTRL_START){
             }
         }
-
+        total_time += 1;
         endFrame();
     }
 

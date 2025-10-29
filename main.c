@@ -92,11 +92,48 @@ int SetupCallbacks(void) {
 	return thid;
 }
 char holder_text[1037] = "";
-char dialogue_lines[1][60] = {
+char core_area[1037] = "                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            ";
+char* dialogue_lines[2] = {
     //intro text
-    ">>you wake up on a rocking boat."
+    " ",
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 };
 char scroller[1037] = "";
+
+void clear_screen(){
+    strcpy(scroller, core_area);
+}
+
+void draw_text_at_pos(ScePspIVector2 position, char* text){
+    int startpoint = 0;
+    int x_offset = 0;
+    if(position.x < 60 && position.y < 17){
+        for(int x = 0; x < strlen(text); x++){
+            startpoint = (position.y * 61) + position.x;
+            if(startpoint + x_offset > 1037){
+                break;
+            }
+            if(text[x] == '\n'){
+                position.y += 1;
+                x_offset = 0;
+                continue;
+            }
+
+            if(startpoint + x_offset < 1037 && position.x + x_offset < 60){
+                scroller[startpoint+x_offset] = text[x];
+                x_offset += 1;
+            } else{
+                
+                position.y += 1;
+                position.x = 0;
+                x_offset = 0;
+                x = x-1;
+            }
+            
+
+        }
+    }
+}
 
 int main() {
     // Boilerplate
@@ -125,11 +162,14 @@ int main() {
     sceCtrlSetSamplingCycle(0);
     sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
     
-    int textpoint = 0;
+    //int textpoint = 0;
     
     size_t total_time = 0;
-    strcpy(holder_text,dialogue_lines[0]);
-
+    //strcpy(holder_text,dialogue_lines[0]);
+    clear_screen();
+    draw_text_at_pos((ScePspIVector2){0,0},"the text portion is done! wew!");
+    
+    //draw_text_at_pos((ScePspIVector2){5,3},dialogue_lines[1]);
     while(running){
 
         startFrame();
@@ -147,31 +187,40 @@ int main() {
         //** Draw Everything Here **//
         draw_font2d(text, scroller, (ScePspFVector2){0,0});
         
-        if(total_time % (1000/1000) == 0){
-            total_time = 0;
+        // if(total_time % (2000/1000) == 0){
+        //     total_time = 0;
             //pspDebugScreenPrintf("%d", textpoint);
-            if (textpoint < strlen(holder_text)){
-                char total_char[] = "";
-                for(int x = textpoint; x < strlen(holder_text); x++){
-                     char charString[2];
-                     charString[0] = holder_text[x];
-                     charString[1] = '\0';
-                     strcat(total_char, charString);
-                     if(holder_text[x] != ' '){
-                         textpoint = x+1;
-                         strcat(scroller,total_char);
-                         break;
-                    }
-                }
+            // if (textpoint < strlen(holder_text)){
+            //     char total_char[60] = "";
+            //     for(int x = textpoint; x < strlen(holder_text); x++){
+                    
+            //          if( holder_text[x] == 32) {
+            //             strcat(total_char, " ");
+            //          } else {
+            //             char charString[2];
+            //             charString[0] = holder_text[x];
+            //             charString[1] = '\0';
+            //             strcat(total_char, charString);
+                        
+            //          }
+                     
+                     
+                     
 
+            //          if( holder_text[x] != 32 && holder_text[x] != '\n'){
+            //              textpoint = x+1;
+            //              strcat(scroller,total_char);
+            //              break;
+            //         }
+            //     }
 
-                // char charString[2];
-                // charString[0] = chosentext[0][textpoint];
-                // charString[1] = '\0';
-                // strcat(scroller[0],charString);
-                // textpoint += 1;
-            }
-        }
+            //     // char charString[2];
+            //     // charString[0] = chosentext[0][textpoint];
+            //     // charString[1] = '\0';
+            //     // strcat(scroller[0],charString);
+            //     // textpoint += 1;
+            // }
+        //}
 
 
         //** End Draw Everything Here **//
@@ -199,7 +248,7 @@ int main() {
             if (pad.Buttons & PSP_CTRL_START){
             }
         }
-        total_time += 1;
+        //total_time += 1;
         endFrame();
     }
 

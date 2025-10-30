@@ -96,21 +96,22 @@ char holder_text[1037] = "";
 char core_area[1037] = "                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            ";
 char* dialogue_lines[] = {
     //intro text
+    " ",
     "#######      ######   ######  #######",
     "##           ##    #  ##    # ##     ",
     "##  ###  ##  ######   ######  ##  ###",
     "##    #      ##    #  ##      ##    #",
     "#######      ##    #  ##      #######",
-    ">> what do you do?",
+    ">> What do you do?",
     //textlines
-    ">> you wake up on a boat.",
-    ">> the sky above you is a soft gray of fog.",
+    ">> You wake up on a boat.",
+    ">> The sky above you is a soft gray of a foggy morning.",
     ">> "
 };
 
 int dialogue_hopper[]= {
-    5, //How many to count over
-    0,1,2,3,4 //counted over
+    8, //How many to count over
+    1,2,3,4,5,0,7,8 //counted over
 };
 
 int save_data[] = {
@@ -164,7 +165,7 @@ void compile_text_lines(){
         initial_compile = 0;
         textpoint = 0;
         for(int x = 0; x < (int)dialogue_hopper[current_set]; x++){
-            strcat(holder_text, dialogue_lines[ (current_set) + x ]);
+            strcat(holder_text, dialogue_lines[ dialogue_hopper[(current_set+1) + x ]]);
             strcat(holder_text, "\n");
         }
     }
@@ -217,8 +218,8 @@ int main() {
     sceGumMatrixMode(GU_MODEL);
     sceGumLoadIdentity();
     pspDebugScreenSetXY(0, 0);
-    Texture* tex = load_texture("Assets/Font/Revel_PixelFont.png",GU_TRUE);
-    Font2D* text = create_font2d(tex,0xFFFFFFFF,(ScePspIVector2){16,8},(ScePspFVector2){8,16},(ScePspFVector2){0,0},"abcdefghijklmnopqrstuvwxyz1234567890.,:;!?|'\"><# ");
+    Texture* tex = load_texture("Assets/Font/monofur/monofurmono_regular.png",GU_TRUE);
+    Font2D* text = create_font2d(tex,0xFFFFFFFF,(ScePspIVector2){16,8},(ScePspFVector2){8,16},(ScePspFVector2){0,0},"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-=_+.,<>?/\\'\"!@#$%^&*()[]{}|:; ");
 
     //Setup Controllers
     SceCtrlData pad;
@@ -233,7 +234,7 @@ int main() {
     clear_screen();
     initial_compile = 1;
     compile_text_lines();
-    draw_text_at_pos((ScePspIVector2){11,2},fulltext);
+    draw_text_at_pos((ScePspIVector2){0,2},fulltext);
     //draw_text_at_pos((ScePspIVector2){5,3},dialogue_lines[1]);
     while(running){
 

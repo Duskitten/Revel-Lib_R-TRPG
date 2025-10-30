@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "bitset": "c",
+        "set": "c",
+        "format": "c"
+    }
+}

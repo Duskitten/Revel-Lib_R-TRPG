@@ -91,13 +91,32 @@ int SetupCallbacks(void) {
 	}
 	return thid;
 }
+char fulltext[1037] = "";
 char holder_text[1037] = "";
 char core_area[1037] = "                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            ";
-char* dialogue_lines[2] = {
+char* dialogue_lines[] = {
     //intro text
-    " ",
-    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    "#######      ######   ######  #######",
+    "##           ##    #  ##    # ##     ",
+    "##  ###  ##  ######   ######  ##  ###",
+    "##    #      ##    #  ##      ##    #",
+    "#######      ##    #  ##      #######",
+    ">> what do you do?",
+    //textlines
+    ">> you wake up on a boat.",
+    ">> the sky above you is a soft gray of fog.",
+    ">> "
 };
+
+int dialogue_hopper[]= {
+    5, //How many to count over
+    0,1,2,3,4 //counted over
+};
+
+int save_data[] = {
+    0, //Has begun game.
+};
+
 char scroller[1037] = "";
 
 void clear_screen(){
@@ -135,6 +154,50 @@ void draw_text_at_pos(ScePspIVector2 position, char* text){
     }
 }
 
+int initial_compile = 0;
+int current_set = 0;
+int accepting_input = 0;
+int textpoint = 0;
+
+void compile_text_lines(){
+    if(initial_compile){
+        initial_compile = 0;
+        textpoint = 0;
+        for(int x = 0; x < (int)dialogue_hopper[current_set]; x++){
+            strcat(holder_text, dialogue_lines[ (current_set) + x ]);
+            strcat(holder_text, "\n");
+        }
+    }
+
+    // if (textpoint < strlen(holder_text)){
+    //     char total_char[1037] = " ";
+    //     for(int x = textpoint; x < strlen(holder_text); x++){
+            
+    //             if( holder_text[x] == 32) {
+    //                 strcat(total_char, " ");
+    //             } else {
+    //                 char charString[2];
+    //                 charString[0] = holder_text[x];
+    //                 charString[1] = '\0';
+    //                 strcat(total_char, charString);
+    //             }
+    //             if( holder_text[x] != 32 && holder_text[x] != '\n'){
+    //                 textpoint = x+1;
+    //                 strcat(fulltext,total_char);
+    //                 break;
+    //         }
+    //     }
+
+    //     // char charString[2];
+    //     // charString[0] = chosentext[0][textpoint];
+    //     // charString[1] = '\0';
+    //     // strcat(scroller[0],charString);
+    //     // textpoint += 1;
+    // }
+    strcpy(fulltext, holder_text);
+}
+
+
 int main() {
     // Boilerplate
     SetupCallbacks();
@@ -164,11 +227,13 @@ int main() {
     
     //int textpoint = 0;
     
-    size_t total_time = 0;
-    //strcpy(holder_text,dialogue_lines[0]);
-    clear_screen();
-    draw_text_at_pos((ScePspIVector2){0,0},"the text portion is done! wew!");
     
+    size_t total_time = 0;
+    
+    clear_screen();
+    initial_compile = 1;
+    compile_text_lines();
+    draw_text_at_pos((ScePspIVector2){11,2},fulltext);
     //draw_text_at_pos((ScePspIVector2){5,3},dialogue_lines[1]);
     while(running){
 
@@ -187,45 +252,15 @@ int main() {
         //** Draw Everything Here **//
         draw_font2d(text, scroller, (ScePspFVector2){0,0});
         
-        // if(total_time % (2000/1000) == 0){
-        //     total_time = 0;
-            //pspDebugScreenPrintf("%d", textpoint);
-            // if (textpoint < strlen(holder_text)){
-            //     char total_char[60] = "";
-            //     for(int x = textpoint; x < strlen(holder_text); x++){
-                    
-            //          if( holder_text[x] == 32) {
-            //             strcat(total_char, " ");
-            //          } else {
-            //             char charString[2];
-            //             charString[0] = holder_text[x];
-            //             charString[1] = '\0';
-            //             strcat(total_char, charString);
-                        
-            //          }
-                     
-                     
-                     
-
-            //          if( holder_text[x] != 32 && holder_text[x] != '\n'){
-            //              textpoint = x+1;
-            //              strcat(scroller,total_char);
-            //              break;
-            //         }
-            //     }
-
-            //     // char charString[2];
-            //     // charString[0] = chosentext[0][textpoint];
-            //     // charString[1] = '\0';
-            //     // strcat(scroller[0],charString);
-            //     // textpoint += 1;
-            // }
-        //}
+    //     if(total_time % (2000/1000) == 0){
+    //         total_time = 0;
+    //         compile_text_lines();
+    //    }
 
 
         //** End Draw Everything Here **//
         //Controller Processing
-        if (pad.Buttons != 0)
+        if (pad.Buttons != 0 && accepting_input)
         {
             if (pad.Buttons & PSP_CTRL_SQUARE){
             }

@@ -97,24 +97,26 @@ char temp_text[1037] = "\0";
 char core_area[1037] = "                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            \n                                                            ";
 char* dialogue_lines[] = {
     //intro text
-    " ",
-    "#######      ######   ######  #######",
-    "##           ##    #  ##    # ##     ",
-    "##  ###  ##  ######   ######  ##  ###",
-    "##    #      ##    #  ##      ##    #",
-    "#######      ##    #  ##      #######",
+    "                                                            ",
+    "           #######       ######   ######  #######",
+    "           ##            ##    #  ##    # ##     ",
+    "           ##  ###  ###  ######   ######  ##  ###",
+    "           ##    #       ##    #  ##      ##    #",
+    "           #######       ##    #  ##      #######",
     ">> What do you do?",
     //textlines
     ">> You wake up on a boat.",
     ">> The sky above you is a soft gray of a foggy morning.",
     ">> You stand up and walk over to the edge of the boat.",
     ">> You sit and feel the boat gently rock back",
-    "and fourth calmly."
+    "and fourth calmly.",
+    "[System] >> Use the D-Pad to scroll through options.",
+    "[System] >> Press (X) to select."
 };
 
 int dialogue_hopper[]= {
-    11, //How many to count over
-    1,2,3,4,5,0,7,8,0,0,6, //counted over
+    13, //How many to count over
+    0,1,2,3,4,5,0,7,8,6,0,12,13, //counted over
     1, 
     9,
     1,
@@ -123,7 +125,13 @@ int dialogue_hopper[]= {
 };
 
 int dialogue_options[] = {
+    2,
+    0,1
+};
 
+char* dialogue_text_options[] = {
+    "[Player] >> Sit.",
+    "[Player] >> Stand Up."
 };
 
 int save_data[] = {
@@ -135,6 +143,8 @@ char scroller[1037] = "\0";
 void clear_screen(){
     strcpy(scroller, core_area);
 }
+
+
 
 void draw_text_at_pos(ScePspIVector2 position, char* text){
     int startpoint = 0;
@@ -171,7 +181,9 @@ int initial_compile = 1;
 int current_set = 0;
 int accepting_input = 0;
 int textpoint = 0;
-
+int current_dialogue_tree = 0;
+int currently_selected_text = 0;
+int currently_selected_pos = 0;
 void compile_text_lines(){
     if(initial_compile){
         initial_compile = 0;
@@ -198,21 +210,31 @@ void compile_text_lines(){
                     break;
                 }
             }
-         }
-         else {
+        }
+        else {
             char string2[2];
             string2[0] = holder_text[textpoint];
             string2[1] = '\0';
             strcat(temp_text,string2);
             textpoint += 1;
-         }
-         
+        }
+        strcpy(fulltext, temp_text);
     } else {
         accepting_input = 1;
     }
-    strcpy(fulltext, temp_text);
+    
 }
 
+void set_new_text(int position) {
+    accepting_input = 0;
+    current_set = position;
+    initial_compile = 1;
+    clear_screen();
+};
+
+void clear_line(int y_pos){
+    draw_text_at_pos((ScePspIVector2){0,y_pos},dialogue_lines[0]);
+}
 
 int main() {
     // Boilerplate
@@ -272,12 +294,15 @@ int main() {
             compile_text_lines();
             draw_text_at_pos((ScePspIVector2){0,0},fulltext);
         }
-
-
+        
+        if(accepting_input){
+            draw_text_at_pos((ScePspIVector2){0,15},dialogue_text_options[currently_selected_text]);
+        }
         //** End Draw Everything Here **//
         //Controller Processing
         if (pad.Buttons != 0 && accepting_input)
         {
+            currently_selected_text = (currently_selected_pos % dialogue_options[current_dialogue_tree]) + (current_dialogue_tree + 1);
             if (pad.Buttons & PSP_CTRL_SQUARE){
             }
             if (pad.Buttons & PSP_CTRL_TRIANGLE){
@@ -285,14 +310,18 @@ int main() {
             if (pad.Buttons & PSP_CTRL_CIRCLE){
             }
             if (pad.Buttons & PSP_CTRL_CROSS){
-                accepting_input = 0;
-                current_set = 12;
-                initial_compile = 1;
-                clear_screen();
+                set_new_text(14);
             }
             if (pad.Buttons & PSP_CTRL_UP){
+                //currently_selected_pos += 1;
+                clear_line(15);
             }
             if (pad.Buttons & PSP_CTRL_DOWN){
+               //currently_selected_pos -= 1;
+                //if(currently_selected_pos < 0){
+                //    currently_selected_pos = dialogue_options[dialogue_options[current_dialogue_tree]-1];
+                //}
+                clear_line(15);
             }
             if (pad.Buttons & PSP_CTRL_LEFT){
             }
